@@ -98,13 +98,13 @@ def clean_telco(df):
     encoded_df['phone_service_encoded'] = df.phone_service.map({'Yes': 1, 'No': 0})
     encoded_df['paperless_billing_encoded'] = df.paperless_billing.map({'Yes': 1, 'No': 0})
     encoded_df['churn_encoded'] = df.churn.map({'Yes': 1, 'No': 0})
-    encoded_df['multiple_lines_encoded'] = df.phone_service.map({'Yes': 1, 'No': 0})
-    encoded_df['online_security_encoded'] = df.phone_service.map({'Yes': 1, 'No': 0})
-    encoded_df['online_backup_encoded'] = df.phone_service.map({'Yes': 1, 'No': 0})
-    encoded_df['device_protection_encoded'] = df.phone_service.map({'Yes': 1, 'No': 0})
-    encoded_df['tech_support_encoded'] = df.churn.map({'Yes': 1, 'No': 0})
-    encoded_df['streaming_tv_encoded'] = df.phone_service.map({'Yes': 1, 'No': 0})
-    encoded_df['streaming_movies_encoded'] = df.phone_service.map({'Yes': 1, 'No': 0})
+    encoded_df['multiple_lines_encoded'] = df.multiple_lines.map({'Yes': 1, 'No': 0})
+    encoded_df['online_security_encoded'] = df.online_security.map({'Yes': 1, 'No': 0})
+    encoded_df['online_backup_encoded'] = df.online_backup.map({'Yes': 1, 'No': 0})
+    encoded_df['device_protection_encoded'] = df.device_protection.map({'Yes': 1, 'No': 0})
+    encoded_df['tech_support_encoded'] = df.tech_support.map({'Yes': 1, 'No': 0})
+    encoded_df['streaming_tv_encoded'] = df.streaming_tv.map({'Yes': 1, 'No': 0})
+    encoded_df['streaming_movies_encoded'] = df.streaming_movies.map({'Yes': 1, 'No': 0})
     
     # Use pandas dummies to pivot features with more than two string values 
     # into multiple columns with binary int values that can be read as boolean 
@@ -132,6 +132,22 @@ def clean_telco(df):
     df = df.drop(columns=['internet_service_type', 
                           'contract_type', 
                           'payment_type'])
+ 
+    # Rename encoded.map columns
+    df.rename(columns = {'gender_encoded':'gender',
+                         'partner_encoded':'partner',
+                         'dependents_encoded':'dependents',
+                         'phone_service_encoded':'phone_service',
+                         'paperless_billing_encoded':'paperless_billing',
+                         'churn_encoded':'churn',
+                         'multiple_lines_encoded':'multiple_lines',
+                         'online_security_encoded':'online_security',
+                         'online_backup_encoded':'online_backup',
+                         'device_protection_encoded':'device_protection',
+                         'tech_support_encoded':'tech_support',
+                         'streaming_tv_encoded':'streaming_tv',
+                         'streaming_movies_encoded':'streaming_movies'}
+              , inplace = True)
     
     return df
 
@@ -152,18 +168,18 @@ def train_val_test_split(df, target):
 
     print('_______________________________________________________________')
     print('|                              DF                             |')
-    print('|-------------------|-------------------|---------------------|')
+    print('|-------------------:-------------------:---------------------|')
     print('|       Train       |       Validate    |          Test       |')
-    print('|-------------------|-------------------|-----------|---------|')
+    print('|-------------------:-------------------:---------------------|')
     print('| x_train | y_train |   x_val  |  y_val |   x_test  |  y_test |')
-    print('|-------------------------------------------------------------|')
+    print(':-------------------------------------------------------------:')
     print('')
     print('* 1. tree_1 = DecisionTreeClassifier(max_depth = 5)')
     print('* 2. tree_1.fit(x_train, y_train)')
     print('* 3. predictions = tree_1.predict(x_train)')
-    print('* 4. pd.crosstab(y_train, predictions)')
+    print('* 4. pd.crosstab(y_train, y_preds)')
     print('* 5. val_predictions = tree_1.predict(x_val)')
-    print('* 6. pd.crosstab(y_val, val_predictions)')
+    print('* 6. pd.crosstab(y_val, y_preds)')
 
     return train, validate, test 
 
